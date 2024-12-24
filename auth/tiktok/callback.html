@@ -1,0 +1,24 @@
+<!-- auth/tiktok/callback.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TikTok Auth Callback</title>
+</head>
+<body>
+    <h1>Procesando autenticación de TikTok...</h1>
+    <script>
+        // Obtener el código de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        
+        // Mostrar el código para que puedas copiarlo
+        if (code) {
+            document.body.innerHTML += `
+                <p>Tu código de autorización es:</p>
+                <code>${code}</code>
+                <p>Copia este código para usarlo en tu aplicación.</p>
+            `;
+        }
+    </script>
+</body>
+</html>
