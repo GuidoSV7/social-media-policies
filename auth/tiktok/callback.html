@@ -15,6 +15,15 @@
             border-radius: 5px;
             margin: 20px 0;
             word-break: break-all;
+            border: 1px solid #ddd;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -29,33 +38,34 @@
             const result = document.getElementById('result');
             
             if (code) {
-                // URL actualizada con /api
                 fetch(`https://social-media-7fdce869d331.herokuapp.com/api/tiktok/callback?code=${code}`)
                     .then(response => response.json())
                     .then(data => {
-                        if (data.success) {
+                        console.log('Respuesta completa:', data); // Para debugging
+                        
+                        if (data.success && data.accessToken) {
                             result.innerHTML = `
-                                <p>Autorización exitosa!</p>
+                                <p class="success">¡Autorización exitosa!</p>
                                 <p>Tu access token es:</p>
                                 <div class="code-box">${data.accessToken}</div>
                                 <p>Guarda este token para usar en tus publicaciones.</p>
                             `;
                         } else {
                             result.innerHTML = `
-                                <p style="color: red;">Error obteniendo el token:</p>
-                                <div class="code-box">${JSON.stringify(data.error)}</div>
+                                <p class="error">Error en la respuesta:</p>
+                                <div class="code-box">${JSON.stringify(data, null, 2)}</div>
                             `;
                         }
                     })
                     .catch(error => {
                         result.innerHTML = `
-                            <p style="color: red;">Error en la petición:</p>
+                            <p class="error">Error en la petición:</p>
                             <div class="code-box">${error.message}</div>
                         `;
                     });
             } else {
                 result.innerHTML = `
-                    <p style="color: red;">No se recibió código de autorización.</p>
+                    <p class="error">No se recibió código de autorización.</p>
                 `;
             }
         };
