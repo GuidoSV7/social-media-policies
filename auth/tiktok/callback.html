@@ -29,12 +29,30 @@
             const result = document.getElementById('result');
             
             if (code) {
-                result.innerHTML = `
-                    <p>Autorización exitosa!</p>
-                    <p>Tu código de autorización es:</p>
-                    <div class="code-box">${code}</div>
-                    <p>Copia este código para usarlo en tu aplicación.</p>
-                `;
+                // URL actualizada con /api
+                fetch(`https://social-media-7fdce869d331.herokuapp.com/api/tiktok/callback?code=${code}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            result.innerHTML = `
+                                <p>Autorización exitosa!</p>
+                                <p>Tu access token es:</p>
+                                <div class="code-box">${data.accessToken}</div>
+                                <p>Guarda este token para usar en tus publicaciones.</p>
+                            `;
+                        } else {
+                            result.innerHTML = `
+                                <p style="color: red;">Error obteniendo el token:</p>
+                                <div class="code-box">${JSON.stringify(data.error)}</div>
+                            `;
+                        }
+                    })
+                    .catch(error => {
+                        result.innerHTML = `
+                            <p style="color: red;">Error en la petición:</p>
+                            <div class="code-box">${error.message}</div>
+                        `;
+                    });
             } else {
                 result.innerHTML = `
                     <p style="color: red;">No se recibió código de autorización.</p>
